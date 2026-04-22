@@ -1,13 +1,19 @@
 # <PROJECT_NAME>
 
-> <ONE_LINE_VALUE_PROPOSITION>
+<ONE_LINE_VALUE_PROPOSITION>
 
 ## 專案資訊
 
 ### 1) 專案定位
 <PROJECT_POSITIONING>
 
-### 2) 為什麼先用 Edge_AI_SDK InferenceKit
+### 2) 模型介紹
+- 核心模型：<CORE_MODEL_1>、<CORE_MODEL_2>
+- 推論流程：<INFERENCE_PIPELINE_HIGHLIGHT>
+- 加速方式：<ACCELERATION_PATH>
+- 技術來源：<UPSTREAM_OR_PAPER_LINK>
+
+### 3) 為什麼先用 Edge_AI_SDK InferenceKit
 - 連結：<https://ess-wiki.advantech.com.tw/view/Edge_AI_SDK/InferenceKit>
 - 建議流程：先安裝 InferenceKit，再安裝本專案
 - 導入好處：
@@ -15,13 +21,13 @@
   - <BENEFIT_2>
   - <BENEFIT_3>
 
-### 3) 已驗證硬體平台
+### 4) 已驗證硬體平台
 | 平台 | 驗證狀態 | 連結 | 備註 |
 |---|---|---|---|
 | <HW_1> | ✅ 已驗證可運作 | <HW_1_LINK> | <HW_1_NOTE> |
 | （預留）其他平台 | ⏳ 待驗證 | - | 後續補充硬體與版本資訊 |
 
-### 4) 執行結果示意
+### 5) 執行結果示意
 <p align="center">
   <img src="<RESULT_IMAGE_OR_GIF_1>" width="48%" />
   <img src="<RESULT_IMAGE_OR_GIF_2>" width="48%" />
@@ -38,9 +44,9 @@
 2. <RUNTIME_REQUIREMENT>
 3. <DEVICE_REQUIREMENT>
 
-### 1) 安裝 / 建置
+### 1) 建置
 ```bash
-<INSTALL_OR_BUILD_COMMANDS>
+<BUILD_COMMANDS>
 ```
 
 ### 2) 第一次啟動（線上準備）
@@ -78,4 +84,5 @@
 ---
 
 ## 文件規範
-本文件遵循 `AI_PROJECT_DOC_STANDARD.md`。
+本文件遵循 `AI_PROJECT_DOC_STANDARD.md`。  
+可直接複製的 README 範本：`AI_PROJECT_README_TEMPLATE.md`
