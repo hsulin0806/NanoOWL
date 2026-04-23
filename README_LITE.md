@@ -1,10 +1,10 @@
 # NanoOWL
 
-EAS_nanoowl 提供以文字驅動（prompt-driven）的視覺推論能力，可在邊緣裝置上執行即時目標偵測與樹狀語意推論（Tree Prediction），適合智慧製造、零售場域、公共空間與工業監控等情境的快速 PoC 與量產導入。
-原始專案: https://github.com/NVIDIA-AI-IOT/nanoowl
+EAS_nanoowl provides prompt-driven vision inference for edge devices, enabling real-time object detection and tree-structured semantic inference (Tree Prediction). It is suitable for rapid PoC and production deployment in smart manufacturing, retail, public spaces, and industrial monitoring scenarios.
 
+Upstream project: <https://github.com/NVIDIA-AI-IOT/nanoowl>
 
-- **Category**：通用領域（General-purpose Edge Vision AI）
+- **Category**: General-purpose Edge Vision AI
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/NVIDIA-AI-IOT/nanoowl/main/assets/jetson_person_2x.gif" width="70%" />
@@ -12,14 +12,14 @@ EAS_nanoowl 提供以文字驅動（prompt-driven）的視覺推論能力，可�
 
 ## OWL-ViT
 
-- **OWL-ViT（Open-Vocabulary Detection）**  
-  Uses natural language descriptions for target classification, enabling open-vocabulary object detection without retraining.
-- **Tree Prompt **  
-  Supports nested prompts, allowing object detection and fine-grained attribute/sub-object recognition within a single pipeline.
+- **OWL-ViT (Open-Vocabulary Detection)**  
+  Uses natural language descriptions for target classes, enabling open-vocabulary object detection without retraining.
+- **Tree Prompt Inference Pipeline**  
+  Supports nested prompts so a single pipeline can perform object detection and fine-grained attribute/sub-object recognition.
 - **TensorRT Optimization**  
-  Leverages a TensorRT engine to improve inference efficiency while maintaining real-time performance and deployability
+  Uses TensorRT engine acceleration to improve inference efficiency while maintaining real-time performance and deployment feasibility.
 
-## 支援平台
+## Supported Platform
 
 | Platform | Hardware Spec | OS | Edge AI SDK |
 |---|---|---|---|
@@ -31,45 +31,57 @@ EAS_nanoowl 提供以文字驅動（prompt-driven）的視覺推論能力，可�
 
 ## Step 1: Download this project
 ```bash
-cd /opt/Advantech/EdgeAI/EdgeAIHub \
+cd /opt/Advantech/EdgeAI/EdgeAIHub
 git clone https://github.com/hsulin0806/EAS_nanoowl
 ```
 
-## Step 2: Check AI Environment
+## Step 2: Check AI environment
 ```bash
 /opt/Advantech/EdgeAI/System/System_Check/ai_stack_check.sh
 ```
-Pass
+Expected: pass.
 
-## Step 3: Ensure you have a camera device connected
-
+## Step 3: Ensure a camera device is connected
 ```bash
 ls -l /dev/video*
 ```
-If no video device is found, exit from the container and check if you can see a video device on the host side.
+If no video device is found, leave the container and verify the video device is visible on the host.
 
 ---
 
-# Develop and Development
+# Development and Deployment
 
-## Setup 1 : Build Docker Image
+## Setup 1: Build Docker image
 ```bash
 cd /opt/Advantech/EdgeAI/EdgeAIHub/NanoOWL/
 docker build -t nanoowl:jp7-thor-persist -f docker/jetpack7-thor/Dockerfile .
 ```
 
-## Setup 1 :Launch the demo
-
+## Setup 2: Launch the demo
 ```bash
 docker compose up -d
 ```
 
-## Setup 2 : Open your browser
+## Setup 3: Open your browser
+Open: `http://<device-ip>:7860`
 
-Open your browser to `http://<device-ip>:7860`
+## Setup 4: Stop the demo
+```bash
+docker compose down
+```
 
+## FAQ
 
-## Setup 3 : Stop the demo
+- Camera cannot be opened:
+  1) Confirm the camera is properly connected to the host.
+  2) Confirm `docker-compose.yml` contains the device mapping:
 
-# Result
-<p align="center"> <img src="https://www.jetson-ai-lab.com/images/tutorials/nanoowl_chrome_window.png" width="70%" /> </p>
+  ```yaml
+  devices:
+    - "/dev/video0:/dev/video0"
+  ```
+
+  Without this mapping, the container cannot access the camera.
+
+- Port 7860 conflict:
+  Stop old containers or other containers using port 7860, then restart.
