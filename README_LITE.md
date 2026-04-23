@@ -48,7 +48,7 @@ ls -l /dev/video*
 ```
 
 ### 1.3 其他必要條件
-- 可連外下載模型
+- 需連接外部網路下載模型
 
 ---
 
@@ -77,3 +77,19 @@ UI 入口：`http://<device-ip>:7860`
 MODEL_DIR=/opt/Advantech/EdgeAI/System/Nvidia_Jetson/VisionAI/app/nanoowl
 MODEL_DIR="$MODEL_DIR" docker compose down
 ```
+
+### 2.4 常見問題
+
+- camera 無法開啟：
+  1) 先確認 camera 是否正常連接到主機。  
+  2) 確認 `docker-compose.yml` 內有正確映射裝置：
+
+  ```yaml
+  devices:
+    - "/dev/video0:/dev/video0"
+  ```
+
+  若缺少此設定，容器將無法存取 camera。
+
+- 7860 端口衝突：
+  停止舊容器或其他佔用 7860 端口的容器後，再重新啟動。
