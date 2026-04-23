@@ -65,22 +65,8 @@ docker compose up -d
 ## Setup 3: Open your browser
 Open: `http://<device-ip>:7860`
 
-## Setup 4: Stop the demo
-```bash
-docker compose down
-```
-
-## FAQ
-
-- Camera cannot be opened:
-  1) Confirm the camera is properly connected to the host.
-  2) Confirm `docker-compose.yml` contains the device mapping:
-
-  ```yaml
-  devices:
-    - "/dev/video0:/dev/video0"
-  ```
-
+## Result
+<p align="center"> <img src="https://www.jetson-ai-lab.com/images/tutorials/nanoowl_chrome_window.png" width="70%" /> </p>
   Without this mapping, the container cannot access the camera.
 
 - Port 7860 conflict:
