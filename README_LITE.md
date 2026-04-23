@@ -1,4 +1,4 @@
-# EAS_nanoowl（精簡版）
+# EAS_nanoowl
 
 ## 0. 專案介紹
 
