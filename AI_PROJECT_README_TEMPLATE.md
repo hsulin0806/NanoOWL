@@ -13,7 +13,16 @@
 - 加速方式：<ACCELERATION_PATH>
 - 技術來源：<UPSTREAM_OR_PAPER_LINK>
 
-### 3) 為什麼先用 Edge_AI_SDK InferenceKit
+### 3) 相依來源與封裝策略（必填）
+- 已 vendor 到 repo 的核心檔案：
+  - <VENDORED_COMPONENT_1>
+  - <VENDORED_COMPONENT_2>
+- 外部依賴（pip/apt）：
+  - <EXTERNAL_DEP_1>
+  - <EXTERNAL_DEP_2>
+- 不依賴 runtime/build-time clone upstream：<YES_OR_EXPLAIN>
+
+### 4) 為什麼先用 Edge_AI_SDK InferenceKit
 - 連結：<https://ess-wiki.advantech.com.tw/view/Edge_AI_SDK/InferenceKit>
 - 建議流程：先安裝 InferenceKit，再安裝本專案
 - 導入好處：
@@ -21,13 +30,13 @@
   - <BENEFIT_2>
   - <BENEFIT_3>
 
-### 4) 已驗證硬體平台
+### 5) 已驗證硬體平台
 | 平台 | 驗證狀態 | 連結 | 備註 |
 |---|---|---|---|
 | <HW_1> | ✅ 已驗證可運作 | <HW_1_LINK> | <HW_1_NOTE> |
 | （預留）其他平台 | ⏳ 待驗證 | - | 後續補充硬體與版本資訊 |
 
-### 5) 執行結果示意
+### 6) 執行結果示意
 <p align="center">
   <img src="<RESULT_IMAGE_OR_GIF_1>" width="48%" />
   <img src="<RESULT_IMAGE_OR_GIF_2>" width="48%" />
@@ -44,8 +53,9 @@
 2. <RUNTIME_REQUIREMENT>
 3. <DEVICE_REQUIREMENT>
 
-### 1) 建置
+### 1) 建置（Host）
 ```bash
+cd <PROJECT_DIR>
 <BUILD_COMMANDS>
 ```
 
@@ -80,6 +90,21 @@
 - <FAQ_1>
 - <FAQ_2>
 - <FAQ_3>
+
+---
+
+## 最低驗收門檻（必填）
+```bash
+cd <PROJECT_DIR>
+docker build -t <IMAGE_TAG> -f <DOCKERFILE_PATH> .
+docker compose up -d
+docker compose ps -a
+```
+
+期望結果：
+- Build 完成（exit code 0）
+- 目標服務狀態為 `Up`
+- 對外 Port 正常映射
 
 ---
 
