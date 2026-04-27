@@ -1,130 +1,69 @@
-# EAS_nanoowl
+# NanoOWL
 
-Enterprise-ready open-vocabulary vision inference for edge AI deployment, based on NanoOWL.
+NanoOWL provides prompt-driven vision inference for edge devices, enabling real-time object detection and tree-structured semantic inference (Tree Prediction). It is suitable for rapid PoC and production deployment in smart manufacturing, retail, public spaces, and industrial monitoring scenarios.
 
-## 專案資訊
+Upstream project: <https://github.com/NVIDIA-AI-IOT/nanoowl>
 
-### 1) 專案定位
-EAS_nanoowl 提供以文字驅動（prompt-driven）的視覺推論能力，可在邊緣裝置上執行即時目標偵測與樹狀語意推論（Tree Prediction），適合智慧製造、零售場域、公共空間與工業監控等情境的快速 PoC 與量產導入。
+- **Category**: General-purpose Edge Vision AI
 
-### 2) 模型介紹
-EAS_nanoowl 核心採用 NanoOWL 技術路線，整合以下模型能力：
-
-- **OWL-ViT（Open-Vocabulary Detection）**  
-  以自然語言描述目標類別，支援不需重訓即可進行開放詞彙偵測。
-- **Tree Prompt 推論流程**  
-  支援巢狀提示（nested prompts），可在同一流程中完成「物件偵測 + 細部屬性/子物件判定」。
-- **TensorRT 加速路徑**  
-  使用 TensorRT engine 提升推論效能，兼顧即時性與部署可行性。
-
-技術來源參考：<https://github.com/NVIDIA-AI-IOT/nanoowl>
-
-### 3) 為什麼先用 Edge_AI_SDK InferenceKit
-- 參考連結：<https://ess-wiki.advantech.com.tw/view/Edge_AI_SDK/InferenceKit>
-- 建議流程：**先安裝 Edge_AI_SDK InferenceKit，再安裝 EAS_nanoowl**
-- 導入效益：
-  - 由 InferenceKit 預先完成 AI 基礎環境與相依元件配置
-  - 大幅降低開發者自行處理系統環境的負擔
-  - 縮短部署準備時間，提升跨專案可複用性與維運一致性
-
-### 4) 已驗證硬體平台
-| 平台 | 驗證狀態 | 連結 | 備註 |
-|---|---|---|---|
-| AIR-075 | ✅ 已驗證可運作 | <https://www.advantech.com/en-us/products/932c8818-07cc-4917-89e9-7a678ddc029c/air-075/mod_8489cdc1-ab25-48e3-a493-085d8db1860f> | JetPack 7.x / CUDA 13 路線 |
-| （預留）其他平台 | ⏳ 待驗證 | - | 後續補充硬體與版本資訊 |
-
-### 5) 執行結果示意
 <p align="center">
-  <img src="https://raw.githubusercontent.com/NVIDIA-AI-IOT/nanoowl/main/assets/jetson_person_2x.gif" width="48%" />
-  <img src="https://raw.githubusercontent.com/NVIDIA-AI-IOT/nanoowl/main/assets/tree_predict_out.jpg" width="48%" />
+  <img src="https://raw.githubusercontent.com/NVIDIA-AI-IOT/nanoowl/main/assets/jetson_person_2x.gif" width="70%" />
 </p>
+
+## OWL-ViT
+
+- **OWL-ViT (Open-Vocabulary Detection)**  
+  Uses natural language descriptions for target classes, enabling open-vocabulary object detection without retraining.
+- **Tree Prompt Inference Pipeline**  
+  Supports nested prompts so a single pipeline can perform object detection and fine-grained attribute/sub-object recognition.
+- **TensorRT Optimization**  
+  Uses TensorRT engine acceleration to improve inference efficiency while maintaining real-time performance and deployment feasibility.
+
+## Supported Platform
+
+| Platform | Hardware Spec | OS | Edge AI SDK |
+|---|---|---|---|
+| AIR-075 | NVIDIA Jetson Thor - RAM: 128/64 GB, Storage: 512 GB | JetPack 7.1 | [Install](https://docs.edge-ai-sdk.advantech.com/docs/Hardware/AI_System/Nvidia/Jetson%20Thor/AIR-075) |
 
 ---
 
-## 開發者資訊（安裝與執行）
+# Setup
 
-> Upstream 參考：<https://github.com/NVIDIA-AI-IOT/nanoowl>
-
-### 0) 前置條件
-1. 已完成 Edge_AI_SDK InferenceKit 安裝（建議）
-2. 裝置具備 NVIDIA GPU runtime
-3. 可存取 camera（例如 `/dev/video0`）
-
-### 1) 建置容器
+## Step 1: Download this project
 ```bash
-git clone https://github.com/hsulin0806/EAS_nanoowl.git
-cd EAS_nanoowl
+cd /opt/Advantech/EdgeAI/EdgeAIHub
+git clone https://github.com/hsulin0806/EAS_nanoowl
+```
+
+## Step 2: Check AI environment
+```bash
+/opt/Advantech/EdgeAI/System/System_Check/ai_stack_check.sh
+```
+Expected: pass.
+
+## Step 3: Ensure a camera device is connected
+```bash
+ls -l /dev/video*
+```
+If no video device is found, leave the container and verify the video device is visible on the host.
+
+---
+
+# Development and Deployment
+
+## Setup 1: Build Docker image
+```bash
+cd /opt/Advantech/EdgeAI/EdgeAIHub/NanoOWL/
 docker build -t nanoowl:jp7-thor-persist -f docker/jetpack7-thor/Dockerfile .
 ```
 
-### 2) 準備模型持久化目錄
+## Setup 2: Launch the demo
 ```bash
-MODEL_DIR=/opt/Advantech/EdgeAI/System/Nvidia_Jetson/VisionAI/app/nanoowl
-mkdir -p "$MODEL_DIR"
+docker compose up -d
 ```
 
-### 3) 第一次啟動（線上準備 + 首次轉換）
-```bash
-docker run --rm --name nanoowl_persist \
-  --ipc=host \
-  --ulimit memlock=-1 --ulimit stack=67108864 \
-  --shm-size=2g \
-  --runtime nvidia \
-  --device=/dev/video0:/dev/video0 \
-  -p 7860:7860 \
-  -e MODEL_DIR=/models \
-  -e ENGINE_PATH=/models/engines/owl_image_encoder_patch32.engine \
-  -v "$MODEL_DIR":/models \
-  -v /usr/src/tensorrt:/usr/src/tensorrt:ro \
-  -v /usr/lib/aarch64-linux-gnu/libnvinfer_plugin.so.10:/opt/hostlibs/libnvinfer_plugin.so.10:ro \
-  -v /usr/lib/aarch64-linux-gnu/libnvinfer_plugin.so.10.13.3:/opt/hostlibs/libnvinfer_plugin.so.10.13.3:ro \
-  -e LD_LIBRARY_PATH=/usr/local/lib/python3.12/dist-packages/tensorrt_libs:/opt/hostlibs:/usr/src/tensorrt/lib \
-  nanoowl:jp7-thor-persist \
-  /opt/nanoowl/docker/jetpack7-thor/run_tree_demo_persistent.sh
-```
+## Setup 3: Open your browser
+Open: `http://<device-ip>:7860`
 
-首次正常訊號：
-- `engine not found, building`
-- `warmup done`
-- `Running on http://0.0.0.0:7860`
-
-### 4) 第二次啟動（快取重用）
-使用相同 `docker run` 指令即可。正常情況下會看到 `engine exists`，且不再進行首次轉換流程。
-
-### 5) 離線啟動（可選）
-```bash
-docker run --rm --name nanoowl_offline \
-  --network none \
-  --ipc=host \
-  --ulimit memlock=-1 --ulimit stack=67108864 \
-  --shm-size=2g \
-  --runtime nvidia \
-  --device=/dev/video0:/dev/video0 \
-  -e MODEL_DIR=/models \
-  -e ENGINE_PATH=/models/engines/owl_image_encoder_patch32.engine \
-  -v "$MODEL_DIR":/models \
-  -v /usr/src/tensorrt:/usr/src/tensorrt:ro \
-  -v /usr/lib/aarch64-linux-gnu/libnvinfer_plugin.so.10:/opt/hostlibs/libnvinfer_plugin.so.10:ro \
-  -v /usr/lib/aarch64-linux-gnu/libnvinfer_plugin.so.10.13.3:/opt/hostlibs/libnvinfer_plugin.so.10.13.3:ro \
-  -e LD_LIBRARY_PATH=/usr/local/lib/python3.12/dist-packages/tensorrt_libs:/opt/hostlibs:/usr/src/tensorrt/lib \
-  nanoowl:jp7-thor-persist \
-  /opt/nanoowl/docker/jetpack7-thor/run_tree_demo_persistent.sh
-```
-
-### 6) Web UI 與快速驗證
-- Web UI：`http://<device-ip>:7860`
-- 健康檢查：
-```bash
-curl -I http://127.0.0.1:7860/
-```
-
-### 7) 常見問題
-- camera 無法開啟：確認 `--device=/dev/video0:/dev/video0`
-- 首次啟動較慢：屬正常（模型/engine/warmup）
-- 7860 端口衝突：停止舊容器後重啟
-
----
-
-## 文件規範
-後續其他 AI 專案文件，請統一依照：`AI_PROJECT_DOC_STANDARD.md` 撰寫。  
-可直接複製的 README 範本：`AI_PROJECT_README_TEMPLATE.md`
+## Result
+<p align="center"> <img src="https://www.jetson-ai-lab.com/images/tutorials/nanoowl_chrome_window.png" width="70%" /> </p>
