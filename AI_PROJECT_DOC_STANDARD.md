@@ -14,6 +14,8 @@
 
 ## B. 固定章節順序（必須）
 
+> 可使用中文章節名或英文章節名（README-style），但內容責任不可缺漏。
+
 ### 1) 專案標題與一句話定位
 - 專案名稱
 - 一句話價值主張（如即時、可部署、可維運）
@@ -56,6 +58,8 @@
 - 驗證方式
 - 常見問題
 
+> 英文對應可用：`Setup` + `Development and Deployment`（Step-by-step）。
+
 ### 9) 最低驗收門檻（新增）
 - `docker build` 成功（含完整指令與工作路徑）
 - `docker compose up -d` 成功
@@ -76,6 +80,7 @@
 6. 避免出現內部備註字樣（如「給採購者/給內部」等）。
 7. 所有 command block 需標示執行位置（host / container）與工作路徑。
 8. 文件中的成功宣告需對應到可查證輸出（log、commit、ps 狀態）。
+9. 若使用英文 README 風格，需至少保留：`Supported Platform`、`Setup`、`Development and Deployment`、`Result` 與驗收命令區塊。
 
 ---
 
@@ -115,3 +120,13 @@
 ## 文件規範
 本文件遵循 `AI_PROJECT_DOC_STANDARD.md`。
 ```
+
+## E. README-style 英文章節映射（建議）
+
+- 專案標題與一句話定位 → `# <PROJECT_NAME>` + one-line description
+- 專案資訊 / 模型介紹 → intro + model feature bullets
+- 已驗證硬體平台 → `## Supported Platform`
+- 開發者資訊（安裝與執行） → `# Setup` + `# Development and Deployment`
+- 執行結果示意 → `## Result`
+- 最低驗收門檻 → build/compose/ps command block + expected `Up`
+- 文件規範引用 → `## Document Standard`
