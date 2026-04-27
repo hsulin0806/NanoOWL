@@ -33,7 +33,7 @@ Upstream project: <https://github.com/NVIDIA-AI-IOT/nanoowl>
 ```bash
 mkdir /opt/Advantech/EdgeAI/EdgeAIHub
 cd /opt/Advantech/EdgeAI/EdgeAIHub
-git clone https://github.com/hsulin0806/nanoowl
+git clone https://github.com/hsulin0806/NanoOWL
 ```
 
 ## Step 2: Check AI environment
